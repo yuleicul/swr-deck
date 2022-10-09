@@ -1,43 +1,57 @@
 import {
-  bCodeSurfer,
+  CodeSurfer,
   CodeSurferColumns,
   Step,
 } from "code-surfer";
 import { duotoneDark, github } from "@code-surfer/themes";
-import BasicUsage from "./components/basic-usage.jsx";
 
-<CodeSurferColumns themes={[duotoneDark, github]} sizes={[1,1]}>
+import BasicUsageOrigin from "./components/basic-usage/BasicUsageOrigin.jsx";
+
+<CodeSurferColumns themes={[duotoneDark, github]} sizes={[1, 1]}>
 
 <Step>
 
 ```jsx title="Basic Usage"
-import React from "react";
+import { useState } from "react";
 import useSWR from "swr";
 
-const fetcher = (url) =>
-  fetch(url).then((res) => res.json());
+const fetcher = (id) =>
+  fetch(
+    `https://jsonplaceholder.typicode.com/posts/${id}`
+  ).then((r) => r.json());
 
-export default function App() {
-  const { data, error } = useSWR(
-    "https://api.github.com/repos/vercel/swr",
-    fetcher
-  );
+export default function Blog() {
+  const [id, setId] = useState(1);
+  const { data, error } = useSWR(id, fetcher);
 
-  if (error) return "An error has occurred.";
-  if (!data) return "Loading...";
   return (
     <div>
-      <h1>{data.name}</h1>
-      <p>{data.description}</p>
-      <strong>👁 {data.subscribers_count}</strong>{" "}
-      <strong>✨ {data.stargazers_count}</strong>{" "}
-      <strong>🍴 {data.forks_count}</strong>
+      <h1>My Blog</h1>
+
+      <button onClick={() => setId(1)}>Blog 1</button>
+      <button onClick={() => setId(2)}>Blog 2</button>
+      <button onClick={() => setId(3)}>Blog 3</button>
+
+      {error ? (
+        <p>Failed to load</p>
+      ) : data ? (
+        <p>
+          <strong>
+            Blog {id}: {data.title}
+          </strong>
+          <p>{data.body}</p>
+        </p>
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 }
 ```
 
-<BasicUsage />
+<div style={{ height: "50%", width: "80%", fontSize: 20 }}>
+  <BasicUsageOrigin />
+</div>
 
 </Step>
 
@@ -45,79 +59,183 @@ export default function App() {
 
 ---
 
-<CodeSurferColumns themes={[duotoneDark, github]} sizes={[1,2]}>
+<CodeSurfer theme={duotoneDark}>
 
-<Step>
-
-```jsx title="Basic Usage"
-import React from "react";
+```jsx
+import { useState } from "react";
 import useSWR from "swr";
 
-const fetcher = (url) =>
-  fetch(url).then((res) => res.json());
+const fetcher = (id) =>
+  fetch(
+    `https://jsonplaceholder.typicode.com/posts/${id}`
+  ).then((r) => r.json());
 
-export default function App() {
-  const { data, error } = useSWR(
-    "https://api.github.com/repos/vercel/swr",
-    fetcher
-  );
+export default function Blog() {
+  const [id, setId] = useState(1);
+  const { data, error } = useSWR(id, fetcher);
 
-  if (error) return "An error has occurred.";
-  if (!data) return "Loading...";
   return (
     <div>
-      <h1>{data.name}</h1>
-      <p>{data.description}</p>
-      <strong>👁 {data.subscribers_count}</strong>{" "}
-      <strong>✨ {data.stargazers_count}</strong>{" "}
-      <strong>🍴 {data.forks_count}</strong>
+      <h1>My Blog</h1>
+
+      <button onClick={() => setId(1)}>Blog 1</button>
+      <button onClick={() => setId(2)}>Blog 2</button>
+      <button onClick={() => setId(3)}>Blog 3</button>
+
+      {error ? (
+        <p>Failed to load</p>
+      ) : data ? (
+        <p>
+          <strong>
+            Blog {id}: {data.title}
+          </strong>
+          <p>{data.body}</p>
+        </p>
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 }
 ```
 
-```jsx
-function useSWR() {}
-```
+```jsx subtitle="Homemade SWR"
+import { useState } from "react";
 
-</Step>
+const useSWR = () => {};
 
-<Step>
+const fetcher = (id) =>
+  fetch(
+    `https://jsonplaceholder.typicode.com/posts/${id}`
+  ).then((r) => r.json());
 
-```jsx title="Basic Usage"
-import React from "react";
-import useSWR from "swr";
+export default function Blog() {
+  const [id, setId] = useState(1);
+  const { data, error } = useSWR(id, fetcher);
 
-const fetcher = (url) =>
-  fetch(url).then((res) => res.json());
-
-export default function App() {
-  const { data, error } = useSWR(
-    "https://api.github.com/repos/vercel/swr",
-    fetcher
-  );
-
-  if (error) return "An error has occurred.";
-  if (!data) return "Loading...";
   return (
     <div>
-      <h1>{data.name}</h1>
-      <p>{data.description}</p>
-      <strong>👁 {data.subscribers_count}</strong>{" "}
-      <strong>✨ {data.stargazers_count}</strong>{" "}
-      <strong>🍴 {data.forks_count}</strong>
+      <h1>My Blog</h1>
+
+      <button onClick={() => setId(1)}>Blog 1</button>
+      <button onClick={() => setId(2)}>Blog 2</button>
+      <button onClick={() => setId(3)}>Blog 3</button>
+
+      {error ? (
+        <p>Failed to load</p>
+      ) : data ? (
+        <p>
+          <strong>
+            Blog {id}: {data.title}
+          </strong>
+          <p>{data.body}</p>
+        </p>
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 }
 ```
 
-```jsx
-function useSWR(key, fetcher) {
+```jsx subtitle="Input and output?"
+import { useState } from "react";
+
+const useSWR = (key, fetcher) => {
   const [data, setData] = useState();
   const [error, setError] = useState();
+
+  return { data, error };
+};
+
+const fetcher = (id) =>
+  fetch(
+    `https://jsonplaceholder.typicode.com/posts/${id}`
+  ).then((r) => r.json());
+
+export default function Blog() {
+  const [id, setId] = useState(1);
+  const { data, error } = useSWR(id, fetcher);
+
+  return (
+    <div>
+      <h1>My Blog</h1>
+
+      <button onClick={() => setId(1)}>Blog 1</button>
+      <button onClick={() => setId(2)}>Blog 2</button>
+      <button onClick={() => setId(3)}>Blog 3</button>
+
+      {error ? (
+        <p>Failed to load</p>
+      ) : data ? (
+        <p>
+          <strong>
+            Blog {id}: {data.title}
+          </strong>
+          <p>{data.body}</p>
+        </p>
+      ) : (
+        <p>Loading...</p>
+      )}
+    </div>
+  );
 }
 ```
 
-</Step>
+```jsx subtitle="Request"
+import { useState } from "react";
 
-</CodeSurferColumns>
+const useSWR = (key, fetcher) => {
+  const [data, setData] = useState();
+  const [error, setError] = useState();
+
+  useEffect(() => {
+    async function fetch() {
+      try {
+        const newData = await fetcher(key);
+        setData(newData);
+      } catch (error) {
+        setError(error);
+      }
+    }
+    fetch();
+  }, [fetcher, key]);
+
+  return { data, error };
+};
+
+const fetcher = (id) =>
+  fetch(
+    `https://jsonplaceholder.typicode.com/posts/${id}`
+  ).then((r) => r.json());
+
+export default function Blog() {
+  const [id, setId] = useState(1);
+  const { data, error } = useSWR(id, fetcher);
+
+  return (
+    <div>
+      <h1>My Blog</h1>
+
+      <button onClick={() => setId(1)}>Blog 1</button>
+      <button onClick={() => setId(2)}>Blog 2</button>
+      <button onClick={() => setId(3)}>Blog 3</button>
+
+      {error ? (
+        <p>Failed to load</p>
+      ) : data ? (
+        <p>
+          <strong>
+            Blog {id}: {data.title}
+          </strong>
+          <p>{data.body}</p>
+        </p>
+      ) : (
+        <p>Loading...</p>
+      )}
+    </div>
+  );
+}
+```
+
+</CodeSurfer>

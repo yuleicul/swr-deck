@@ -1,11 +1,9 @@
-import {
-  CodeSurfer,
-  CodeSurferColumns,
-  Step,
-} from "code-surfer";
+import { CodeSurfer, CodeSurferColumns, Step } from "code-surfer";
 import { duotoneDark, github } from "@code-surfer/themes";
 
-import BasicUsageOrigin from "./components/basic-usage/BasicUsageOrigin.jsx";
+import BasicUsageDemo from "./components/basic-usage/demo.jsx";
+import HomemadeBasicUsageWithoutCache from './components/basic-usage/homemade/BasicUsageWithoutCache.jsx'
+import HomemadeBasicUsage from './components/basic-usage/homemade/BasicUsage.jsx'
 
 <CodeSurferColumns themes={[duotoneDark, github]} sizes={[1, 1]}>
 
@@ -16,33 +14,39 @@ import { useState } from "react";
 import useSWR from "swr";
 
 const fetcher = (id) =>
-  fetch(
-    `https://jsonplaceholder.typicode.com/posts/${id}`
-  ).then((r) => r.json());
+  fetch(`https://api.github.com/repos/${id}`).then((r) =>
+    r.json()
+  );
 
-export default function Blog() {
-  const [id, setId] = useState(1);
-  const { data, error } = useSWR(id, fetcher);
+export default function TrendingProjects() {
+  const [id, setId] = useState("facebook/react");
+  const { data } = useSWR(id, fetcher);
 
   return (
     <div>
-      <h1>My Blog</h1>
+      <h1>Trending Projects</h1>
 
-      <button onClick={() => setId(1)}>Blog 1</button>
-      <button onClick={() => setId(2)}>Blog 2</button>
-      <button onClick={() => setId(3)}>Blog 3</button>
+      <div>
+        <button onClick={() => setId("facebook/react")}>
+          React
+        </button>{" "}
+        <button onClick={() => setId("vercel/swr")}>
+          SWR
+        </button>{" "}
+        <button onClick={() => setId("TanStack/query")}>
+          TanStack Query
+        </button>
+      </div>
 
-      {error ? (
-        <p>Failed to load</p>
-      ) : data ? (
-        <p>
-          <strong>
-            Blog {id}: {data.title}
-          </strong>
-          <p>{data.body}</p>
-        </p>
+      {data ? (
+        <div>
+          <h2>{id}</h2>
+          <p>forks: {data.forks_count}</p>
+          <p>stars: {data.stargazers_count}</p>
+          <p>watchers: {data.watchers}</p>
+        </div>
       ) : (
-        <p>Loading...</p>
+        <p>loading...</p>
       )}
     </div>
   );
@@ -50,7 +54,7 @@ export default function Blog() {
 ```
 
 <div style={{ height: "50%", width: "80%", fontSize: 20 }}>
-  <BasicUsageOrigin />
+  <BasicUsageDemo />
 </div>
 
 </Step>
@@ -66,172 +70,191 @@ import { useState } from "react";
 import useSWR from "swr";
 
 const fetcher = (id) =>
-  fetch(
-    `https://jsonplaceholder.typicode.com/posts/${id}`
-  ).then((r) => r.json());
+  fetch(`https://api.github.com/repos/${id}`).then((r) =>
+    r.json()
+  );
 
-export default function Blog() {
-  const [id, setId] = useState(1);
-  const { data, error } = useSWR(id, fetcher);
+export default function TrendingProjects() {
+  const [id, setId] = useState("facebook/react");
+  const { data } = useSWR(id, fetcher);
 
   return (
     <div>
-      <h1>My Blog</h1>
+      <h1>Trending Projects</h1>
 
-      <button onClick={() => setId(1)}>Blog 1</button>
-      <button onClick={() => setId(2)}>Blog 2</button>
-      <button onClick={() => setId(3)}>Blog 3</button>
+      <div>
+        <button onClick={() => setId("facebook/react")}>
+          React
+        </button>{" "}
+        <button onClick={() => setId("vercel/swr")}>
+          SWR
+        </button>{" "}
+        <button onClick={() => setId("TanStack/query")}>
+          TanStack Query
+        </button>
+      </div>
 
-      {error ? (
-        <p>Failed to load</p>
-      ) : data ? (
-        <p>
-          <strong>
-            Blog {id}: {data.title}
-          </strong>
-          <p>{data.body}</p>
-        </p>
+      {data ? (
+        <div>
+          <h2>{id}</h2>
+          <p>forks: {data.forks_count}</p>
+          <p>stars: {data.stargazers_count}</p>
+          <p>watchers: {data.watchers}</p>
+        </div>
       ) : (
-        <p>Loading...</p>
+        <p>loading...</p>
       )}
     </div>
   );
 }
 ```
 
-```jsx subtitle="Homemade SWR"
+```jsx subtitle="Let's build our own SWR!"
 import { useState } from "react";
 
-const useSWR = () => {};
+const useSWR = {}
 
 const fetcher = (id) =>
-  fetch(
-    `https://jsonplaceholder.typicode.com/posts/${id}`
-  ).then((r) => r.json());
+  fetch(`https://api.github.com/repos/${id}`).then((r) =>
+    r.json()
+  );
 
-export default function Blog() {
-  const [id, setId] = useState(1);
-  const { data, error } = useSWR(id, fetcher);
+export default function TrendingProjects() {
+  const [id, setId] = useState("facebook/react");
+  const { data } = useSWR(id, fetcher);
 
   return (
     <div>
-      <h1>My Blog</h1>
+      <h1>Trending Projects</h1>
 
-      <button onClick={() => setId(1)}>Blog 1</button>
-      <button onClick={() => setId(2)}>Blog 2</button>
-      <button onClick={() => setId(3)}>Blog 3</button>
+      <div>
+        <button onClick={() => setId("facebook/react")}>
+          React
+        </button>{" "}
+        <button onClick={() => setId("vercel/swr")}>
+          SWR
+        </button>{" "}
+        <button onClick={() => setId("TanStack/query")}>
+          TanStack Query
+        </button>
+      </div>
 
-      {error ? (
-        <p>Failed to load</p>
-      ) : data ? (
-        <p>
-          <strong>
-            Blog {id}: {data.title}
-          </strong>
-          <p>{data.body}</p>
-        </p>
+      {data ? (
+        <div>
+          <h2>{id}</h2>
+          <p>forks: {data.forks_count}</p>
+          <p>stars: {data.stargazers_count}</p>
+          <p>watchers: {data.watchers}</p>
+        </div>
       ) : (
-        <p>Loading...</p>
+        <p>loading...</p>
       )}
     </div>
   );
 }
 ```
 
-```jsx subtitle="Input and output?"
+```jsx
 import { useState } from "react";
 
 const useSWR = (key, fetcher) => {
   const [data, setData] = useState();
-  const [error, setError] = useState();
 
-  return { data, error };
+  return { data };
 };
 
 const fetcher = (id) =>
-  fetch(
-    `https://jsonplaceholder.typicode.com/posts/${id}`
-  ).then((r) => r.json());
+  fetch(`https://api.github.com/repos/${id}`).then((r) =>
+    r.json()
+  );
 
-export default function Blog() {
-  const [id, setId] = useState(1);
-  const { data, error } = useSWR(id, fetcher);
+export default function TrendingProjects() {
+  const [id, setId] = useState("facebook/react");
+  const { data } = useSWR(id, fetcher);
 
   return (
     <div>
-      <h1>My Blog</h1>
+      <h1>Trending Projects</h1>
 
-      <button onClick={() => setId(1)}>Blog 1</button>
-      <button onClick={() => setId(2)}>Blog 2</button>
-      <button onClick={() => setId(3)}>Blog 3</button>
+      <div>
+        <button onClick={() => setId("facebook/react")}>
+          React
+        </button>{" "}
+        <button onClick={() => setId("vercel/swr")}>
+          SWR
+        </button>{" "}
+        <button onClick={() => setId("TanStack/query")}>
+          TanStack Query
+        </button>
+      </div>
 
-      {error ? (
-        <p>Failed to load</p>
-      ) : data ? (
-        <p>
-          <strong>
-            Blog {id}: {data.title}
-          </strong>
-          <p>{data.body}</p>
-        </p>
+      {data ? (
+        <div>
+          <h2>{id}</h2>
+          <p>forks: {data.forks_count}</p>
+          <p>stars: {data.stargazers_count}</p>
+          <p>watchers: {data.watchers}</p>
+        </div>
       ) : (
-        <p>Loading...</p>
+        <p>loading...</p>
       )}
     </div>
   );
 }
 ```
 
-```jsx subtitle="Request"
+```jsx
 import { useState } from "react";
 
 const useSWR = (key, fetcher) => {
   const [data, setData] = useState();
-  const [error, setError] = useState();
 
   useEffect(() => {
     async function fetch() {
-      try {
-        const newData = await fetcher(key);
-        setData(newData);
-      } catch (error) {
-        setError(error);
-      }
+      setData(undefined);
+      const newData = await fetcher(key);
+      setData(newData);
     }
     fetch();
   }, [fetcher, key]);
 
-  return { data, error };
+  return { data };
 };
 
 const fetcher = (id) =>
-  fetch(
-    `https://jsonplaceholder.typicode.com/posts/${id}`
-  ).then((r) => r.json());
+  fetch(`https://api.github.com/repos/${id}`).then((r) =>
+    r.json()
+  );
 
-export default function Blog() {
-  const [id, setId] = useState(1);
-  const { data, error } = useSWR(id, fetcher);
+export default function TrendingProjects() {
+  const [id, setId] = useState("facebook/react");
+  const { data } = useSWR(id, fetcher);
 
   return (
     <div>
-      <h1>My Blog</h1>
+      <h1>Trending Projects</h1>
 
-      <button onClick={() => setId(1)}>Blog 1</button>
-      <button onClick={() => setId(2)}>Blog 2</button>
-      <button onClick={() => setId(3)}>Blog 3</button>
+      <div>
+        <button onClick={() => setId("facebook/react")}>
+          React
+        </button>{" "}
+        <button onClick={() => setId("vercel/swr")}>
+          SWR
+        </button>{" "}
+        <button onClick={() => setId("TanStack/query")}>
+          TanStack Query
+        </button>
+      </div>
 
-      {error ? (
-        <p>Failed to load</p>
-      ) : data ? (
-        <p>
-          <strong>
-            Blog {id}: {data.title}
-          </strong>
-          <p>{data.body}</p>
-        </p>
+      {data ? (
+        <div>
+          <h2>{id}</h2>
+          <p>forks: {data.forks_count}</p>
+          <p>stars: {data.stargazers_count}</p>
+          <p>watchers: {data.watchers}</p>
+        </div>
       ) : (
-        <p>Loading...</p>
+        <p>loading...</p>
       )}
     </div>
   );
@@ -239,3 +262,73 @@ export default function Blog() {
 ```
 
 </CodeSurfer>
+
+---
+
+<CodeSurferColumns themes={[duotoneDark, github]} sizes={[1, 1]}>
+
+<Step>
+
+```jsx
+import { useState, useEffect } from "react";
+
+const useSWR = (key, fetcher) => {
+  const [data, setData] = useState();
+
+  useEffect(() => {
+    async function fetch() {
+      setData(undefined);
+      const newData = await fetcher(key);
+      setData(newData);
+    }
+    fetch();
+  }, [fetcher, key]);
+
+  return { data };
+};
+
+const fetcher = (id) =>
+  fetch(`https://api.github.com/repos/${id}`).then((r) =>
+    r.json()
+  );
+
+export default function TrendingProjects() {
+  const [id, setId] = useState("facebook/react");
+  const { data } = useSWR(id, fetcher);
+
+  return (
+    <div>
+      <h1>Trending Projects</h1>
+      <button onClick={() => setId("facebook/react")}>
+        React
+      </button>{" "}
+      <button onClick={() => setId("vercel/swr")}>
+        SWR
+      </button>{" "}
+      <button onClick={() => setId("TanStack/query")}>
+        TanStack Query
+      </button>
+      {data ? (
+        <div>
+          <h2>{id}</h2>
+          <p>forks: {data.forks_count}</p>
+          <p>stars: {data.stargazers_count}</p>
+          <p>watchers: {data.watchers}</p>
+        </div>
+      ) : (
+        <p>loading...</p>
+      )}
+    </div>
+  );
+}
+```
+
+<div style={{ height: "50%", width: "80%", fontSize: 20 }}>
+  <HomemadeBasicUsageWithoutCache />
+</div>
+
+</Step>
+
+</CodeSurferColumns>
+
+---

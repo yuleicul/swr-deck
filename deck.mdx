@@ -11,11 +11,11 @@ import Deduplication from './components/02.deduplication/homemade/index.jsx'
 import FocusRevalidateDemo from './components/03.focus-revalidate/demo.jsx'
 import FocusRevalidate from './components/03.focus-revalidate/homemade/index.jsx'
 
-<CodeSurferColumns themes={[github, github]} sizes={[1, 1]}>
+<CodeSurferColumns themes={[vsDark, github]} sizes={[3, 2]}>
 
 <Step>
 
-```jsx title="Basic Usage"
+```jsx title="Basic Usage" showNumbers="true"
 import React, { useState } from "react";
 import useSWR from "swr";
 
@@ -61,7 +61,41 @@ export default function TrendingProjects() {
 }
 ```
 
-<div style={{ height: "50%", width: "80%", fontSize: 20 }}>
+<div style={{ height: "60%", width: "80%", fontSize: 20 }}>
+  <BasicUsageDemo />
+</div>
+
+</Step>
+
+<Step>
+
+```diff 9:43
+```
+
+<div style={{ height: "60%", width: "80%", fontSize: 20 }}>
+  <BasicUsageDemo />
+</div>
+
+</Step>
+
+<Step>
+
+```diff 4:7,11
+```
+
+<div style={{ height: "60%", width: "80%", fontSize: 20 }}>
+  <BasicUsageDemo />
+</div>
+
+</Step>
+
+<Step>
+
+```diff
+
+```
+
+<div style={{ height: "60%", width: "80%", fontSize: 20 }}>
   <BasicUsageDemo />
 </div>
 
@@ -73,7 +107,7 @@ export default function TrendingProjects() {
 
 <CodeSurfer theme={vsDark}>
 
-```jsx
+```jsx showNumbers="true"
 import React, { useState } from "react";
 import useSWR from "swr";
 
@@ -117,6 +151,9 @@ export default function TrendingProjects() {
     </div>
   );
 }
+```
+
+```diff 2
 ```
 
 ```jsx subtitle="Let's build our own SWR!"
@@ -166,6 +203,12 @@ export default function TrendingProjects() {
 }
 ```
 
+```diff 12
+```
+
+```diff 3
+```
+
 ```jsx
 import React, { useState } from "react";
 
@@ -277,15 +320,18 @@ export default function TrendingProjects() {
 }
 ```
 
+```diff
+```
+
 </CodeSurfer>
 
 ---
 
-<CodeSurferColumns themes={[vsDark, github]} sizes={[1, 1]}>
+<CodeSurferColumns themes={[vsDark, github]} sizes={[3, 2]}>
 
 <Step>
 
-```jsx
+```jsx showNumbers="true"
 import React, { useState, useEffect } from "react";
 
 const useSWR = (key, fetcher) => {
@@ -345,8 +391,210 @@ export default function TrendingProjects() {
 }
 ```
 
-<div style={{ height: "50%", width: "80%", fontSize: 20 }}>
+<div style={{ height: "60%", width: "80%", fontSize: 20 }}>
   <BasicUsageWithoutCache />
+</div>
+
+</Step>
+
+<Step>
+
+```diff subtitle="Let's add the cache -> excalidraw"
+```
+
+<div style={{ height: "60%", width: "80%", fontSize: 20 }}>
+  <BasicUsageWithoutCache />
+</div>
+
+</Step>
+
+<Step>
+
+```diff 3:16"
+```
+
+<div style={{ height: "60%", width: "80%", fontSize: 20 }}>
+  <BasicUsageWithoutCache />
+</div>
+
+</Step>
+
+<Step>
+
+```jsx
+import React, { useState, useEffect, useRef } from "react";
+
+const cache = new Map();
+
+const useSWR = (key, fetcher) => {
+  const keyRef = useRef(key);
+  const [data, setData] = useState();
+
+  useEffect(() => {
+    async function fetch() {
+      const newData = await fetcher(key);
+
+      keyRef.current = key;
+      cache.set(key, newData);
+
+      setData(newData);
+    }
+    fetch();
+  }, [fetcher, key]);
+
+  return {
+    data: keyRef.current === key ? data : cache.get(key),
+  };
+};
+
+const fetcher = (id) =>
+  fetch(`https://api.github.com/repos/${id}`).then((r) =>
+    r.json()
+  );
+
+export default function TrendingProjects() {
+  const [id, setId] = useState("facebook/react");
+  const { data } = useSWR(id, fetcher);
+
+  return (
+    <div>
+      <h1>Trending Projects</h1>
+
+      <div>
+        <button onClick={() => setId("facebook/react")}>
+          React
+        </button>{" "}
+        <button onClick={() => setId("vercel/swr")}>
+          SWR
+        </button>{" "}
+        <button onClick={() => setId("TanStack/query")}>
+          TanStack Query
+        </button>
+      </div>
+
+      {data ? (
+        <>
+          <h2>{id}</h2>
+          <ul>
+            <li>forks: {data.forks_count}</li>
+            <li>stars: {data.stargazers_count}</li>
+            <li>watchers: {data.watchers}</li>
+          </ul>
+        </>
+      ) : (
+        <p>loading...</p>
+      )}
+    </div>
+  );
+}
+```
+
+<div style={{ height: "60%", width: "80%", fontSize: 20 }}>
+  <BasicUsage />
+</div>
+
+</Step>
+
+<Step>
+
+```diff 3:24 subtitle="Stale While Revalidate? -> meaning"
+```
+
+<div style={{ height: "60%", width: "80%", fontSize: 20 }}>
+  <BasicUsage />
+</div>
+
+</Step>
+
+<Step>
+
+```jsx 14:26
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+} from "react";
+
+const cache = new Map();
+
+const useSWR = (key, fetcher) => {
+  const keyRef = useRef(key);
+  const [data, setData] = useState();
+
+  const revalidate = useCallback(async () => {
+    const newData = await fetcher(key);
+
+    keyRef.current = key;
+    cache.set(key, newData);
+
+    setData(newData);
+  }, [fetcher, key]);
+
+  useEffect(() => {
+    revalidate();
+  }, [revalidate]);
+
+  return {
+    data: keyRef.current === key ? data : cache.get(key),
+  };
+};
+
+const fetcher = (id) =>
+  fetch(`https://api.github.com/repos/${id}`).then((r) =>
+    r.json()
+  );
+
+export default function TrendingProjects() {
+  const [id, setId] = useState("facebook/react");
+  const { data } = useSWR(id, fetcher);
+
+  return (
+    <div>
+      <h1>Trending Projects</h1>
+
+      <div>
+        <button onClick={() => setId("facebook/react")}>
+          React
+        </button>{" "}
+        <button onClick={() => setId("vercel/swr")}>
+          SWR
+        </button>{" "}
+        <button onClick={() => setId("TanStack/query")}>
+          TanStack Query
+        </button>
+      </div>
+
+      {data ? (
+        <>
+          <h2>{id}</h2>
+          <ul>
+            <li>forks: {data.forks_count}</li>
+            <li>stars: {data.stargazers_count}</li>
+            <li>watchers: {data.watchers}</li>
+          </ul>
+        </>
+      ) : (
+        <p>loading...</p>
+      )}
+    </div>
+  );
+}
+```
+
+<div style={{ height: "60%", width: "80%", fontSize: 20 }}>
+  <BasicUsage />
+</div>
+
+</Step>
+
+<Step>
+
+```diff title="Basic Usage"
+```
+
+<div style={{ height: "60%", width: "80%", fontSize: 20 }}>
+  <BasicUsage />
 </div>
 
 </Step>
@@ -489,7 +737,7 @@ export default function TrendingProjects() {
 
 ---
 
-<CodeSurferColumns themes={[vsDark, github]} sizes={[1, 1]}>
+<CodeSurferColumns themes={[vsDark, github]} sizes={[3, 2]}>
 
 <Step>
 

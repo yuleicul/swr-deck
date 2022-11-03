@@ -82,6 +82,15 @@ const fetcher = (id) =>
     1000
   );
 
+// const fetcher = (id) =>
+//   fetch(`https://api.github.com/repos/${id}`)
+//     .then((r) => r.json())
+//     .then((r) =>
+//       Object.assign(r, {
+//         updated_at: new Date().toLocaleString(),
+//       })
+//     );
+
 export default function TrendingProjects() {
   const [id, setId] = useState("facebook/react");
   const { data } = useSWR(id, fetcher);

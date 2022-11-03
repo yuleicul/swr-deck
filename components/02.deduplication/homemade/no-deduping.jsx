@@ -6,32 +6,14 @@ import React, {
 } from "react";
 import { createResponse } from "../../utils";
 
-// How to elaborate on this:
-// 1. excalidraw: stacks with key
-// 2. await
-//    Q&A preparation: what is `await` exactly?
-// 3. setTimeout
 const cache = new Map();
-
-const CONCURRENT_PROMISES = {};
 
 const useSWR = (key, fetcher) => {
   const keyRef = useRef(key);
   const [data, setData] = useState();
 
   const revalidate = useCallback(async () => {
-    let newData;
-    if (!CONCURRENT_PROMISES[key]) {
-      CONCURRENT_PROMISES[key] = fetcher(key);
-
-      setTimeout(() => {
-        CONCURRENT_PROMISES[key] = null;
-      }, 1000);
-
-      newData = await CONCURRENT_PROMISES[key];
-    } else {
-      newData = await CONCURRENT_PROMISES[key];
-    }
+    const newData = await fetcher(key);
 
     keyRef.current = key;
     cache.set(key, newData);

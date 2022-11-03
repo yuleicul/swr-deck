@@ -60,11 +60,9 @@ const fetcher = (id) =>
 //   fetch(`https://api.github.com/repos/${id}`).then((r) =>
 //     r.json()
 //   );
-
 export default function TrendingProjects() {
   const [id, setId] = useState("facebook/react");
   const { data } = useSWR(id, fetcher);
-  const { data: dupingData } = useSWR(id, fetcher);
 
   return (
     <div>
@@ -90,19 +88,7 @@ export default function TrendingProjects() {
             <li>stars: {data.stargazers_count}</li>
             <li>watchers: {data.watchers}</li>
           </ul>
-        </>
-      ) : (
-        <p>loading...</p>
-      )}
-
-      {dupingData ? (
-        <>
-          <h2>{id}</h2>
-          <ul>
-            <li>forks: {data.forks_count}</li>
-            <li>stars: {data.stargazers_count}</li>
-            <li>watchers: {data.watchers}</li>
-          </ul>
+          <p>updated at: </p>
         </>
       ) : (
         <p>loading...</p>

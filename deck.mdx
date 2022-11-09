@@ -19,7 +19,7 @@ import FocusRevalidate from './components/03.focus-revalidate/homemade/index.jsx
 
 <Step>
 
-```jsx title="Basic Usage" showNumbers="true"
+```jsx title="Example" showNumbers="true"
 import React, { useState } from "react";
 import useSWR from "swr";
 
@@ -403,7 +403,7 @@ export default function TrendingProjects() {
 
 <Step>
 
-```diff subtitle="Let's add the cache -> excalidraw"
+```diff subtitle="Cache?"
 ```
 
 <div style={{ height: "70%", width: "70%", fontSize: 20 }}>
@@ -501,7 +501,18 @@ export default function TrendingProjects() {
 
 <Step>
 
-```diff 3:24 subtitle="Stale While Revalidate? -> meaning"
+```diff 3:24 subtitle="Stale While Revalidate?"
+```
+
+<div style={{ height: "70%", width: "70%", fontSize: 20 }}>
+  <BasicUsage />
+</div>
+
+</Step>
+
+<Step>
+
+```diff 3:24 subtitle="SWR is a strategy to first return the data from cache (stale), then send the fetch request (revalidate), and finally come with the up-to-date data."
 ```
 
 <div style={{ height: "70%", width: "70%", fontSize: 20 }}>
@@ -594,7 +605,7 @@ export default function TrendingProjects() {
 
 <Step>
 
-```diff 8:30 title="Basic Usage"
+```diff 8:30 title="Caching"
 ```
 
 <div style={{ height: "70%", width: "70%", fontSize: 20 }}>
@@ -712,7 +723,18 @@ export default function TrendingProjects() {
 
 <Step>
 
-```diff 8:30 subtitle="Let's dedupe requests! -> excalidraw"
+```diff 40,70:82 subtitle="Request deduplication?"
+```
+
+<div style={{ height: "70%", width: "70%", fontSize: 20 }}>
+  <NoDeduping />
+</div>
+
+</Step>
+
+<Step>
+
+```diff 8:30
 ```
 
 <div style={{ height: "70%", width: "70%", fontSize: 20 }}>
@@ -743,12 +765,9 @@ const useSWR = (key, fetcher) => {
     let newData;
     if (!CONCURRENT_PROMISES[key]) {
       CONCURRENT_PROMISES[key] = fetcher(key);
-
-      setTimeout(() => {
-        CONCURRENT_PROMISES[key] = null;
-      }, 1000);
-
       newData = await CONCURRENT_PROMISES[key];
+      
+      delete CONCURRENT_PROMISES[key];
     } else {
       newData = await CONCURRENT_PROMISES[key];
     }
@@ -874,12 +893,9 @@ const useSWR = (key, fetcher) => {
     let newData;
     if (!CONCURRENT_PROMISES[key]) {
       CONCURRENT_PROMISES[key] = fetcher(key);
-
-      setTimeout(() => {
-        CONCURRENT_PROMISES[key] = null;
-      }, 1000);
-
       newData = await CONCURRENT_PROMISES[key];
+      
+      delete CONCURRENT_PROMISES[key];
     } else {
       newData = await CONCURRENT_PROMISES[key];
     }
@@ -981,12 +997,9 @@ const useSWR = (key, fetcher) => {
     let newData;
     if (!CONCURRENT_PROMISES[key]) {
       CONCURRENT_PROMISES[key] = fetcher(key);
-
-      setTimeout(() => {
-        CONCURRENT_PROMISES[key] = null;
-      }, 1000);
-
       newData = await CONCURRENT_PROMISES[key];
+      
+      delete CONCURRENT_PROMISES[key];
     } else {
       newData = await CONCURRENT_PROMISES[key];
     }
@@ -1061,7 +1074,7 @@ export default function TrendingProjects() {
 
 <Step>
 
-```diff 8:43 subtitle="Let's revalidate on focus! -> tab switch"
+```diff 8:43 subtitle="Let's revalidate on focus!"
 ```
 
 <div style={{ height: "70%", width: "70%", fontSize: 20 }}>
@@ -1103,12 +1116,9 @@ const useSWR = (key, fetcher) => {
     let newData;
     if (!CONCURRENT_PROMISES[key]) {
       CONCURRENT_PROMISES[key] = fetcher(key);
-
-      setTimeout(() => {
-        CONCURRENT_PROMISES[key] = null;
-      }, 1000);
-
       newData = await CONCURRENT_PROMISES[key];
+      
+      delete CONCURRENT_PROMISES[key];
     } else {
       newData = await CONCURRENT_PROMISES[key];
     }
@@ -1125,6 +1135,8 @@ const useSWR = (key, fetcher) => {
   }, [revalidate]);
 
   useEffect(() => {
+    // https://developer.mozilla.org/
+    // en-US/docs/Web/API/Document/visibilitychange_event
     document.addEventListener(
       "visibilitychange",
       visibilityChangeListener
@@ -1218,6 +1230,37 @@ export default function TrendingProjects() {
 
 <div style={{ height: "70%", width: "70%", fontSize: 20 }}>
   <FocusRevalidate />
+</div>
+
+</Step>
+
+<Step>
+
+```diff
+```
+
+<div style={{ height: "70%", width: "70%", fontSize: 20 }}>
+  <FocusRevalidate />
+</div>
+
+</Step>
+
+<Step>
+
+```mermaid
+stateDiagram-v2
+[*] --> Still
+Still --> [*] 
+```
+
+<div style={{ height: "70%", width: "70%", fontSize: 20 }}>
+
+```mermaid
+stateDiagram-v2
+[*] --> Still
+Still --> [*] 
+```
+
 </div>
 
 </Step>

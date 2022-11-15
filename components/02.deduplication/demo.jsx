@@ -38,7 +38,7 @@ export default function TrendingProjects() {
 
       {data ? (
         <>
-          <h2>{id}</h2>
+          <h2>{data.full_name}</h2>
           <ul>
             <li>forks: {data.forks_count}</li>
             <li>stars: {data.stargazers_count}</li>
@@ -51,7 +51,7 @@ export default function TrendingProjects() {
 
       {dupingData ? (
         <>
-          <h2>{id}</h2>
+          <h2>{dupingData.full_name}</h2>
           <ul>
             <li>forks: {data.forks_count}</li>
             <li>stars: {data.stargazers_count}</li>

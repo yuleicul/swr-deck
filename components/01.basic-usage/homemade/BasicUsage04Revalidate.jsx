@@ -1,4 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+// Update `fetch` to `revalidate`
+// because stale-while-revalidate
+
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+} from "react";
 import { createResponse } from "../../utils";
 
 const cache = new Map();
@@ -7,17 +15,18 @@ const useSWR = (key, fetcher) => {
   const keyRef = useRef(key);
   const [data, setData] = useState();
 
-  useEffect(() => {
-    async function fetch() {
-      const newData = await fetcher(key);
+  const revalidate = useCallback(async () => {
+    const newData = await fetcher(key);
 
-      keyRef.current = key;
-      cache.set(key, newData);
+    keyRef.current = key;
+    cache.set(key, newData);
 
-      setData(newData);
-    }
-    fetch();
+    setData(newData);
   }, [fetcher, key]);
+
+  useEffect(() => {
+    revalidate();
+  }, [revalidate]);
 
   return {
     data: keyRef.current === key ? data : cache.get(key),
@@ -59,7 +68,7 @@ export default function TrendingProjects() {
 
       {data ? (
         <>
-          <h2>{id}</h2>
+          <h2>{data.full_name}</h2>
           <ul>
             <li>forks: {data.forks_count}</li>
             <li>stars: {data.stargazers_count}</li>

@@ -20,7 +20,7 @@ import FocusRevalidate from './components/03.focus-revalidate/homemade/index.jsx
 
 <Step>
 
-```jsx title="Example" showNumbers="true"
+```jsx title="Example" 
 import React, { useState } from "react";
 import useSWR from "swr";
 
@@ -112,7 +112,7 @@ export default function TrendingProjects() {
 
 <CodeSurfer theme={vsDark}>
 
-```jsx showNumbers="true"
+```jsx 
 import React, { useState } from "react";
 import useSWR from "swr";
 
@@ -335,7 +335,7 @@ export default function TrendingProjects() {
 
 <Step>
 
-```jsx showNumbers="true"
+```jsx 
 import React, { useState, useEffect } from "react";
 
 const useSWR = (key, fetcher) => {
@@ -514,7 +514,7 @@ export default function TrendingProjects() {
 ```diff 3:24 
 ```
 
-<div style={{ height: "70%", width: "70%", fontSize: 26 }}>
+<div style={{ height: "50%", width: "70%", fontSize: 26 }}>
 
   <span style={{ color: 'coral' }}>S</span>W<span style={{ color: 'cornflowerblue' }}>R</span> is a strategy to 
 
@@ -604,7 +604,7 @@ export default function TrendingProjects() {
 }
 ```
 
-<div style={{ height: "70%", width: "70%", fontSize: 26 }}>
+<div style={{ height: "50%", width: "70%", fontSize: 26 }}>
 
   <span style={{ color: 'coral' }}>S</span>W<span style={{ color: 'cornflowerblue' }}>R</span> is a strategy to 
 
@@ -788,9 +788,9 @@ export default function TrendingProjects() {
         <>
           <h2>{dupingData.full_name}</h2>
           <ul>
-            <li>forks: {data.forks_count}</li>
-            <li>stars: {data.stargazers_count}</li>
-            <li>watchers: {data.watchers}</li>
+            <li>forks: {dupingData.forks_count}</li>
+            <li>stars: {dupingData.stargazers_count}</li>
+            <li>watchers: {dupingData.watchers}</li>
           </ul>
         </>
       ) : (
@@ -916,9 +916,9 @@ export default function TrendingProjects() {
         <>
           <h2>{dupingData.full_name}</h2>
           <ul>
-            <li>forks: {data.forks_count}</li>
-            <li>stars: {data.stargazers_count}</li>
-            <li>watchers: {data.watchers}</li>
+            <li>forks: {dupingData.forks_count}</li>
+            <li>stars: {dupingData.stargazers_count}</li>
+            <li>watchers: {dupingData.watchers}</li>
           </ul>
         </>
       ) : (
@@ -937,7 +937,7 @@ export default function TrendingProjects() {
 
 <Step>
 
-```diff 8:43 title="Request Deduplication"
+```diff 8:40 title="Request Deduplication"
 ```
 
 <div style={{ height: "70%", width: "70%", fontSize: 20 }}>
@@ -948,7 +948,7 @@ export default function TrendingProjects() {
 
 <Step>
 
-```diff 50:98
+```diff 47:95
 ```
 
 <div style={{ height: "70%", width: "70%", fontSize: 20 }}>
@@ -1052,7 +1052,7 @@ export default function TrendingProjects() {
 
 <Step>
 
-```diff 45:48
+```diff 42:45
 ```
 
 <div style={{ height: "70%", width: "70%", fontSize: 20 }}>
@@ -1300,7 +1300,7 @@ export default function TrendingProjects() {
 
 <Step>
 
-```diff 8:62 title="Revalidate on Focus"
+```diff 8:61 title="Revalidate on Focus"
 ```
 
 <div style={{ height: "70%", width: "70%", fontSize: 20 }}>

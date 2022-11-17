@@ -81,9 +81,9 @@ export default function TrendingProjects() {
         <>
           <h2>{dupingData.full_name}</h2>
           <ul>
-            <li>forks: {data.forks_count}</li>
-            <li>stars: {data.stargazers_count}</li>
-            <li>watchers: {data.watchers}</li>
+            <li>forks: {dupingData.forks_count}</li>
+            <li>stars: {dupingData.stargazers_count}</li>
+            <li>watchers: {dupingData.watchers}</li>
           </ul>
         </>
       ) : (
